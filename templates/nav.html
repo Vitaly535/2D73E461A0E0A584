@@ -1,0 +1,27 @@
+<style>
+nav{text-align:left;}
+    nav h4{
+    display: inline;
+    margin-right: 10px;
+      margin-left:10px;
+    }
+</style>
+
+<nav  style="background-color: #e3f2fd;">
+    <nav> 
+    <h4><a class="navbar-brand" href="/"><span style="color:red">Func</span>App</a></h4>
+   
+        {% if request.user.is_authenticated %}
+       <h4>
+         Пользователь: 
+        <a href ='/admin/'> {{ request.user.username }}</a></h4>
+        
+        <h4><a class="p-2 text-dark" href="admin/">Зайти в админ</a></h4>      
+        <h4><a class="p-2 text-dark" href="{% url 'password_change' %}">Изменить пароль</a> </h4>     
+        <h4><a class="p-2 text-dark" href="{% url 'logout' %}">Выйти</a></h4>
+        {% else %}
+        <h4><a class="p-2 text-dark" href="/admin/">Войти</a></h4>|
+       <h4> <a class="p-2 text-dark" href="{% url 'signup' %}">Регистрация</a></h4>
+         {% endif %}
+  </nav> 
+</nav>

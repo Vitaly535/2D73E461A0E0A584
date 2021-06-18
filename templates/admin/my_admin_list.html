@@ -1,0 +1,49 @@
+{% extends "admin/change_list.html" %}
+{% load i18n admin_urls static admin_list %}
+{% load static %}
+{% csrf_token %}
+{% block filters %}
+    {% if cl.has_filters %}
+      <div id="changelist-filter">
+        <h2>{% translate 'Filter' %}</h2>
+        {% if cl.has_active_filters %}<h3 id="changelist-filter-clear">
+     <a href="{{ cl.clear_all_filters_qs }}">&#10006; {% translate "Clear all filters" %}</a>
+        </h3>{% endif %}
+        {% for spec in cl.filter_specs %}{% admin_list_filter cl spec %}{% endfor %}
+      </div>
+    {% endif %}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+ 
+<script>
+document.addEventListener("DOMContentLoaded", function(event) {     
+  var task = "{{ request.session.task_id }}"
+  if ( task && task !='None' ) {
+        getStatus(task)
+      }
+    });
+</script>
+<script>
+function getStatus(taskID) {
+  $.ajax({
+    url: `/task/${taskID}`,
+    method: 'GET'
+  })
+  .done((res) => {
+    const taskStatus = res.task_status;
+    if (taskStatus === 'SUCCESS'){ 
+      window.location.reload(false);
+      return false
+    }
+    else{
+    setTimeout(function() {
+      getStatus(res.task_id);
+    }, 1000);}
+  })
+  .fail((err) => {
+    console.log(err)
+  });
+}
+</script>
+
+{% endblock %}
