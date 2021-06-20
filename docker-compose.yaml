@@ -1,6 +1,8 @@
 version: "3.8"
 
 services:
+  rabbitmq:
+    image: rabbitmq:latest
 
   redis:
     image: "redis:alpine"
@@ -41,6 +43,9 @@ services:
     depends_on:
       - db
       - redis
+    volumes:
+      - .:/code
+      - media_value:/code/media/
     env_file:
       - ./.env
       

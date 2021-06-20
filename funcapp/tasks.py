@@ -5,6 +5,7 @@ from celery.signals import task_success
 from celery.utils.log import get_task_logger
 
 from django.core.files.base import ContentFile
+from django.utils import timezone
 
 from . import plot
 
@@ -25,12 +26,13 @@ def save_plot_task(id):
     if arry[1]:
         f = plot.plott(arrx[1], arry[0])
         content_file = ContentFile(f.getvalue())
-        logger.info("Save plot image")
-        obj.plot.save(f'plot_{id}.png', content_file)
+        logger.info(f"Save plot image - {content_file} - {f}")
+        obj.plot.save(f'plot_{id}.png', content_file, save=False)
+        logger.info(f"file plot_{id}.png saved")
     else:
         logger.info(f"Save error message{arry[0]}")
         obj.errorfield = arry[0]
-    obj.last_date = datetime.datetime.now()
+    obj.last_date = datetime.datetime.now(tz=timezone.utc)
     obj.save()
     return True
 
