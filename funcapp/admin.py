@@ -23,11 +23,11 @@ class FunktionAdmin(admin.ModelAdmin):
     def graph(self, obj):
         url = obj.plot.url if obj.plot else None
         if url:
-            return format_html('<img src="{thumb}"width="240" height="240" />'.
-                               format(thumb=url,))
+            return format_html(f'<a href={url}>'
+                               f'<img src="{url}"width="240" height="240" />'
+                               '</a>')
         else:
             return obj.errorfield
-    graph.short_description = 'график'
 
     def time_seconds(self, obj):
         return obj.last_date.strftime("%d-%m-%Y %H:%M:%S.%f")
